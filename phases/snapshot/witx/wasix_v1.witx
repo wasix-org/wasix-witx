@@ -226,7 +226,7 @@
     (result $error (expected $pid (error $errno)))
   )
 
-  ;;; execve()  executes  the  program  referred to by pathname.  This causes the
+  ;;; execv()  executes  the  program  referred to by pathname.  This causes the
   ;;; program that is currently being run by the calling process to  be  replaced
   ;;; with  a  new  program, with newly initialized stack, heap, and (initialized
   ;;; and uninitialized) data segments
