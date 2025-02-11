@@ -713,6 +713,16 @@
   )
 )
 
+;;; Actual file descriptor flags. The fdflags type from WASI corresponds to
+;;; file status flags, which is why we had to come up with a weird name for
+;;; this type.
+(typename $fdflagsext
+  (flags (@witx repr u16)
+    ;;; Close this file in the child process when spawning one.
+    $cloexec
+  )
+)
+
 ;;; Rect that represents the TTY.
 (typename $tty
   (record

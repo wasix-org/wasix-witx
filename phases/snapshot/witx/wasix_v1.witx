@@ -30,6 +30,15 @@
     (result $error (expected $fd (error $errno)))
   )
 
+  ;;; Atomically duplicate a file handle.
+  ;;
+  (@interface func (export "fd_dup2")
+    (param $fd $fd)
+    (param $min_result_fd $fd)
+    (param $cloexec $bool)
+    (result $error (expected $fd (error $errno)))
+  )
+
   ;;; Creates a file handle for event notifications
   ;;;
   (@interface func (export "fd_event")
@@ -200,6 +209,60 @@
     (param $val $longsize)
     ;;; This function never returns
     (@witx noreturn)
+  )
+
+  ;;; Open a file or directory.
+  ;;
+  ;;; The returned file descriptor is not guaranteed to be the lowest-numbered
+  ;;; file descriptor not currently open; it is randomized to prevent
+  ;;; applications from depending on making assumptions about indexes, since this
+  ;;; is error-prone in multi-threaded contexts. The returned file descriptor is
+  ;;; guaranteed to be less than 2**31.
+  ;;
+  ;;; Note: This is similar to `openat` in POSIX.
+  ;;
+  ;;; Recreated in WASIX from the original WASI function to add support for
+  ;;; fdflagsext.
+  (@interface func (export "path_open2")
+    (param $fd $fd)
+    ;;; Flags determining the method of how the path is resolved.
+    (param $dirflags $lookupflags)
+    ;;; The relative path of the file or directory to open, relative to the
+    ;;; `path_open::fd` directory.
+    (param $path string)
+    ;;; The method by which to open the file.
+    (param $oflags $oflags)
+    ;;; The initial rights of the newly created file descriptor. The
+    ;;; implementation is allowed to return a file descriptor with fewer rights
+    ;;; than specified, if and only if those rights do not apply to the type of
+    ;;; file being opened.
+    ;;
+    ;;; The *base* rights are rights that will apply to operations using the file
+    ;;; descriptor itself, while the *inheriting* rights are rights that apply to
+    ;;; file descriptors derived from it.
+    (param $fs_rights_base $rights)
+    (param $fs_rights_inheriting $rights)
+    (param $fdflags $fdflags)
+    (param $fdflagsext $fdflagsext)
+    ;;; The file descriptor of the file that has been opened.
+    (result $error (expected $fd (error $errno)))
+  )
+
+  ;;; Get the FD flags of a file descriptor (fdflagsext).
+  ;;; Note: This returns similar flags to `fsync(fd, F_GETFD)` in POSIX.
+  (@interface func (export "fd_fdflags_get")
+    (param $fd $fd)
+    ;;; The buffer where the file descriptor's attributes are stored.
+    (result $error (expected $fdflagsext (error $errno)))
+  )
+
+  ;;; Adjust the FD flags associated with a file descriptor.
+  ;;; Note: This is similar to `fcntl(fd, F_SETFD, flags)` in POSIX.
+  (@interface func (export "fd_fdflags_set")
+    (param $fd $fd)
+    ;;; The desired values of the file descriptor flags.
+    (param $flags $fdflagsext)
+    (result $error (expected (error $errno)))
   )
 
   ;;; Send a signal to the process of the calling thread on a regular basis
