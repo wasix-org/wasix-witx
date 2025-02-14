@@ -537,6 +537,25 @@
     (result $error (expected $fd (error $errno)))
   )
 
+  ;;; Create a pair of interconnected sockets.
+  ;;;
+  ;;; creates a pair of interconnected sockets and returns both file
+  ;;; descriptors. The file descriptors returned by a successful
+  ;;; call will be the lowest-numbered file descriptors not currently open
+  ;;; for the process.
+  ;;;
+  ;;; Note: This is similar to `socketpair` in POSIX using PF_INET
+  (@interface func (export "sock_pair")
+    ;;; Address family
+    (param $af $address_family)
+    ;;; Socket type, either datagram or stream
+    (param $socktype $sock_type)
+    ;;; Socket protocol
+    (param $sock_proto $sock_proto)
+    ;;; The file descriptors of the sockets that have been opened.
+    (result $error (expected (tuple $fd $fd) (error $errno)))
+  )
+
   ;;; Sets a particular socket setting
   ;;; Note: This is similar to `setsockopt` in POSIX for SO_REUSEADDR
   (@interface func (export "sock_set_opt_flag")
