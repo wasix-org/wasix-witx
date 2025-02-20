@@ -439,6 +439,8 @@
   )
 )
 
+(typename $signal_and_action_array (list $signal_and_action))
+
 ;;; A region of memory for scatter/gather reads.
 (typename hidden $iovec
   (record
@@ -1663,3 +1665,41 @@
     (field $data $epoll_data)
   )
 )
+
+;;; Names of FD operations performed during proc_spawn2.
+(typename $proc_spawn_fd_op_name
+  (enum (@witx tag u8)
+    ;;; Close an FD.
+    $close
+    ;;; Duplicate (i.e. renumber) an FD.
+    $dup2
+    ;;; Open a file.
+    $open
+    ;;; Change directory to a path.
+    $chdir
+    ;;; Change directory to an FD.
+    $fchdir
+  )
+)
+
+;;; An FD operation performed during proc_spawn2,
+;;; which is the backing syscall for posix_spawn.
+(typename $proc_spawn_fd_op
+  (record
+    (field $cmd $proc_spawn_fd_op_name)
+    (field $fd $fd)
+    (field $src_fd $fd)
+    (field $path (@witx pointer u8))
+    (field $path_len $pointersize)
+
+    ;; The oflags parameter is used to extract all of these, same as path_open2.
+    (field $dirflags $lookupflags)
+    (field $oflags $oflags)
+    (field $fs_rights_base $rights)
+    (field $fs_rights_inheriting $rights)
+    (field $fdflags $fdflags)
+    (field $fdflagsext $fdflagsext)
+  )
+)
+
+(typename $proc_spawn_fd_op_array (list $proc_spawn_fd_op))

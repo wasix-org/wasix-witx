@@ -339,6 +339,10 @@
     ;;; List of the env vars to pass the process
     ;;; (entries are separated by line feeds)
     (param $envs string)
+    ;;; Whether to search for the file in PATH.
+    (param $search_path $bool)
+    ;;; The current value of the PATH env var.
+    (param $path string)
     ;;; If the named process does not exist an error will be returned.
     (result $error (expected (error $errno)))
   )
@@ -368,6 +372,32 @@
     (param $working_dir string)
     ;;; Returns a bus process id that can be used to invoke calls
     (result $error (expected $process_handles (error $errno)))
+  )
+
+  ;;; Spawns a new process within the context of the parent process
+  ;;; (i.e. this process). It inherits the filesystem and sandbox
+  ;;; permissions but runs standalone.
+  (@interface func (export "proc_spawn2")
+    ;;; Name of the process to be spawned
+    (param $name string)
+    ;;; List of the arguments to pass the process
+    ;;; (entries are separated by line feeds)
+    (param $args string)
+    ;;; List of the env vars to pass the process
+    ;;; (entries are separated by line feeds)
+    (param $envs string)
+    ;;; List of FD operations to perform before
+    ;;; spawning the new process.
+    (param $fd_ops $proc_spawn_fd_op_array)
+    ;;; List of signal-action pairs to override
+    ;;; for the new process.
+    (param $signal_actions $signal_and_action_array)
+    ;;; Whether to search for the file in PATH.
+    (param $search_path $bool)
+    ;;; The current value of the PATH env var.
+    (param $path string)
+    ;;; If the named process does not exist an error will be returned.
+    (result $error (expected $pid (error $errno)))
   )
 
   ;;; Returns the handle of the current process
