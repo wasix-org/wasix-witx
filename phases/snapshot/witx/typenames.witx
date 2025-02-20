@@ -421,6 +421,24 @@
   )
 )
 
+;;; Signal action.
+(typename $sig_action
+  (enum (@witx tag u8)
+    ;;; Default action.
+    $default
+    ;;; Ignore the signal.
+    $ignore
+  )
+)
+
+;;; A signal and its corresponding action.
+(typename $signal_and_action
+  (record
+    (field $sig $signal)
+    (field $act $sig_action)
+  )
+)
+
 ;;; A region of memory for scatter/gather reads.
 (typename hidden $iovec
   (record

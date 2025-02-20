@@ -405,6 +405,18 @@
     (result $error (expected (error $errno)))
   )
 
+  ;;; Read host-provided signal actions.
+  ;;; The size of the array should match that returned by `proc_signals_count_get`.
+  (@interface func (export "proc_signals_get")
+    (param $buf (@witx pointer u8))
+    (result $error (expected (error $errno)))
+  )
+  ;;; Return host-provided signal count.
+  (@interface func (export "proc_signals_count_get")
+    ;;; Returns the number of signal actions, or an error.
+    (result $error (expected $size (error $errno)))
+  )
+
   ;;; Explicitly requests for the runtime to create a
   ;;; snapshot of the guest module's state.
   (@interface func (export "proc_snapshot")
