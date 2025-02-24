@@ -389,9 +389,9 @@
     ;;; List of FD operations to perform before
     ;;; spawning the new process.
     (param $fd_ops $proc_spawn_fd_op_array)
-    ;;; List of signal-action pairs to override
+    ;;; List of signal dispositions to override
     ;;; for the new process.
-    (param $signal_actions $signal_and_action_array)
+    (param $signal_dispositions $signal_disposition_array)
     ;;; Whether to search for the file in PATH.
     (param $search_path $bool)
     ;;; The current value of the PATH env var.
@@ -435,15 +435,15 @@
     (result $error (expected (error $errno)))
   )
 
-  ;;; Read host-provided signal actions.
-  ;;; The size of the array should match that returned by `proc_signals_count_get`.
+  ;;; Read host-provided signal dispositions.
+  ;;; The size of the array should match that returned by `proc_signals_sizes_get`.
   (@interface func (export "proc_signals_get")
     (param $buf (@witx pointer u8))
     (result $error (expected (error $errno)))
   )
   ;;; Return host-provided signal count.
-  (@interface func (export "proc_signals_count_get")
-    ;;; Returns the number of signal actions, or an error.
+  (@interface func (export "proc_signals_sizes_get")
+    ;;; Returns the number of signal dispositions, or an error.
     (result $error (expected $size (error $errno)))
   )
 

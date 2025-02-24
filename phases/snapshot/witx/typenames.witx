@@ -422,7 +422,7 @@
 )
 
 ;;; Signal action.
-(typename $sig_action
+(typename $disposition
   (enum (@witx tag u8)
     ;;; Default action.
     $default
@@ -431,15 +431,15 @@
   )
 )
 
-;;; A signal and its corresponding action.
-(typename $signal_and_action
+;;; A signal and its corresponding disposition.
+(typename $signal_disposition
   (record
     (field $sig $signal)
-    (field $act $sig_action)
+    (field $disp $disposition)
   )
 )
 
-(typename $signal_and_action_array (list $signal_and_action))
+(typename $signal_disposition_array (list $signal_disposition))
 
 ;;; A region of memory for scatter/gather reads.
 (typename hidden $iovec
