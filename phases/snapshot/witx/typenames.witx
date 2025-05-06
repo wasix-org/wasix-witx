@@ -1703,3 +1703,18 @@
 )
 
 (typename $proc_spawn_fd_op_array (list $proc_spawn_fd_op))
+
+;;; A handle to a dynamically-loaded library.
+(typename $dl_handle u32)
+
+;;; Dynamic loading flags
+(typename $dl_flags
+  (flags (@witx repr u32)
+    $lazy
+    $now
+    $global
+    $noload
+    $nodelete
+    $deepbind
+  )
+)

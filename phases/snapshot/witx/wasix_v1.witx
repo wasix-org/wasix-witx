@@ -871,4 +871,33 @@
     ;;; The number of events returned.
     (result $error (expected $size (error $errno)))
   )
+
+  ;;; Open a dynamically-linked module.
+  ;;;
+  (@interface func (export "dlopen")
+    (param $path string)
+    (param $flags $dl_flags)
+    (param $err_buf (@witx pointer u8))
+    (param $err_buf_len $size)
+    (result $error (expected $dl_handle (error $errno)))
+  )
+
+  ;;; Close a dynamically-linked module.
+  ;;;
+  (@interface func (export "dlclose")
+    (param $handle $dl_handle)
+    (param $err_buf (@witx pointer u8))
+    (param $err_buf_len $size)
+    (result $error (expected (error $errno)))
+  )
+
+  ;;; Load a symbol from a dynamically-linked module.
+  ;;;
+  (@interface func (export "dlsym")
+    (param $handle $dl_handle)
+    (param $symbol string)
+    (param $err_buf (@witx pointer u8))
+    (param $err_buf_len $size)
+    (result $error (expected $size (error $errno)))
+  )
 )
