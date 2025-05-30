@@ -886,6 +886,7 @@
     (param $flags $dl_flags)
     (param $err_buf (@witx pointer u8))
     (param $err_buf_len $size)
+    (param $ld_library_path string)
     (result $error (expected $dl_handle (error $errno)))
   )
 
