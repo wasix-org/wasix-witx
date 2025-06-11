@@ -316,6 +316,8 @@
     $recv_waitall
     ;;; Indicates if the packet should be truncated to the buffer size
     $recv_data_truncated
+    ;;; Return immediately if the read would block.
+    $recv_dont_wait
   )
 )
 
@@ -604,7 +606,15 @@
     $hidden
   )
 )
-(typename hidden $siflags u16)
+
+;;; Flags provided to sock_send.
+(typename $siflags
+   (flags (@witx repr u16)
+    ;;; Return immediately if the write would block.
+    $send_dont_wait
+  )
+)
+
 (typename hidden $sdflags
   (flags (@witx repr u8)
     $hidden
