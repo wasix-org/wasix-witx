@@ -899,4 +899,28 @@
     (param $err_buf_len $size)
     (result $error (expected $size (error $errno)))
   )
+
+  ;;; Call a function pointer with dynamic parameters.
+  (@interface func (export "call_dynamic")
+    ;;; An index into the __indirect_function_table
+    ;;;
+    ;;; Your module needs to either import or export the table to be able
+    ;;; to call this function.
+    (param $function_id $function_pointer)
+    ;;; A buffer with the parameters to pass to the function.
+    ;;; This buffer is expected to contain all parameters sequentially
+    ;;;
+    ;;; For example if the function takes an i32 and an i64, the 
+    ;;; buffer will be 12 bytes long, with the first 4 bytes
+    ;;; being the i32 and the next 8 bytes being the i64.
+    (param $values (@witx pointer u8))
+    ;;; A pointer to a buffer for the results of the function call.
+    ;;;
+    ;;; In most cases this will be a single value, but it could also
+    ;;; contain multiple values. The same rules apply as for the
+    ;;; parameters, i.e. the buffer needs to be large enough
+    ;;; to hold all the results sequentially.
+    (param $results (@witx pointer u8))
+    (result $error (expected (error $errno)))
+  )
 )

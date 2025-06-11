@@ -1718,3 +1718,7 @@
     $deepbind
   )
 )
+
+;;; A function pointer into the __indirect function table.
+(typename $function_pointer usize)
+
