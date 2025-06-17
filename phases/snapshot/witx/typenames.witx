@@ -1722,3 +1722,19 @@
 ;;; A function pointer into the __indirect function table.
 (typename $function_pointer usize)
 
+;;; The parameters of a function
+(typename $wasm_parameter_type
+  (enum (@witx tag u8)
+    ;;; A i32 parameter.
+    $i32
+    ;;; A i64 parameter.
+    $i64
+    ;;; A f32 parameter.
+    $f32
+    ;;; A f64 parameter.
+    $f64
+  )
+)
+
+;;; A list of WASM parameter types.
+(typename $wasm_parameter_type_array (list $wasm_parameter_type))
