@@ -899,4 +899,65 @@
     (param $err_buf_len $size)
     (result $error (expected $size (error $errno)))
   )
+
+  ;;; Call a function pointer with dynamic parameters.
+  (@interface func (export "call_dynamic")
+    ;;; An index into the __indirect_function_table
+    ;;;
+    ;;; Your module needs to either import or export the table to be able
+    ;;; to call this function.
+    (param $function_id $function_pointer)
+    ;;; A buffer with the parameters to pass to the function.
+    ;;; This buffer is expected to contain all parameters sequentially
+    ;;;
+    ;;; For example if the function takes an i32 and an i64, the 
+    ;;; buffer will be 12 bytes long, with the first 4 bytes
+    ;;; being the i32 and the next 8 bytes being the i64.
+    (param $values (@witx pointer u8))
+    ;;; A pointer to a buffer for the results of the function call.
+    ;;;
+    ;;; In most cases this will be a single value, but it could also
+    ;;; contain multiple values. The same rules apply as for the
+    ;;; parameters, i.e. the buffer needs to be large enough
+    ;;; to hold all the results sequentially.
+    (param $results (@witx pointer u8))
+    (result $error (expected (error $errno)))
+  )
+
+  ;;; Prepare a closure for execution.
+  (@interface func (export "closure_prepare")
+    ;;; A index into the indirect function table that points to the function that will be called when the closure is executed.
+    ;;; 
+    ;;; That function needs to conform to the following signature:
+    ;;;   uint8_t* values - a pointer to a buffer containing the arguments. See call_dynamic for more details.
+    ;;;   uint8_t* results - a pointer to a buffer where the results will be written. See call_dynamic for more details.
+    ;;;   void* user_data_ptr - the user_data_ptr that was passed to closure_prepare
+    (param $backing_function_id $function_pointer)
+    ;;; An index into the indirect function table that was previously allocated with closure_alloc
+    ;;;
+    ;;; After closure_prepare the slot in the indirect function table will contain a funcref to a closure with the requested signature.
+    ;;; Every call to the closure will be translated to a call to the backing function.
+    (param $closure_id $function_pointer)
+    ;;; A list of types of the arguments that the closure will take.
+    (param $argument_types $wasm_parameter_type_array)
+    ;;; A list of types that the closure will return.
+    (param $result_types $wasm_parameter_type_array)
+    ;;; A pointer to a buffer that will be passed to the closure when it is executed.
+    (param $user_data_ptr (@witx pointer u8))
+    (result $error (expected (error $errno)))
+  )
+
+  ;;; Allocate a closure for use with the closure_prepare function.
+  (@interface func (export "closure_allocate")
+    (result $error (expected $function_pointer (error $errno)))
+  )
+
+  ;;; Free a closure that was previously allocated with closure_allocate.
+  ;;;
+  ;;; After this call it is undefined what happens when you call the funcref at the index specified by closure_id.
+  (@interface func (export "closure_free")
+    ;;; An index into the indirect function table that was previously allocated with closure_allocate
+    (param $closure_id $function_pointer)
+    (result $error (expected (error $errno)))
+  )
 )
