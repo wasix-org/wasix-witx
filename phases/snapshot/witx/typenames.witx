@@ -1722,19 +1722,23 @@
 ;;; A function pointer into the __indirect function table.
 (typename $function_pointer usize)
 
-;;; The parameters of a function
-(typename $wasm_parameter_type
+;;; The type of a WASM value represented at runtime for use with the wasix closures API.
+;;;
+;;; For now only number types are supported, but this may be extended in the future to include references
+(typename $wasm_value_type
   (enum (@witx tag u8)
-    ;;; A i32 parameter.
+    ;;; A i32 value.
     $i32
-    ;;; A i64 parameter.
+    ;;; A i64 value.
     $i64
-    ;;; A f32 parameter.
+    ;;; A f32 value.
     $f32
-    ;;; A f64 parameter.
+    ;;; A f64 value.
     $f64
+    ;;; A v128 value.
+    $v128
   )
 )
 
-;;; A list of WASM parameter types.
-(typename $wasm_parameter_type_array (list $wasm_parameter_type))
+;;; A list of WASM value types.
+(typename $wasm_value_type_array (list $wasm_value_type))

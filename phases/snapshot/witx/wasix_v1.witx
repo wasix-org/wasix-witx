@@ -939,9 +939,9 @@
     ;;; Every call to the closure will be translated to a call to the backing function.
     (param $closure_id $function_pointer)
     ;;; A list of types of the arguments that the closure will take.
-    (param $argument_types $wasm_parameter_type_array)
+    (param $argument_types $wasm_value_type_array)
     ;;; A list of types that the closure will return.
-    (param $result_types $wasm_parameter_type_array)
+    (param $result_types $wasm_value_type_array)
     ;;; A pointer to a buffer that will be passed to the closure when it is executed.
     (param $user_data_ptr (@witx pointer u8))
     (result $error (expected (error $errno)))
