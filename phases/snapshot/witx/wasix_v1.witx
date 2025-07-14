@@ -914,6 +914,7 @@
     ;;; buffer will be 12 bytes long, with the first 4 bytes
     ;;; being the i32 and the next 8 bytes being the i64.
     (param $values (@witx pointer u8))
+    (param $values_len $pointersize)
     ;;; A pointer to a buffer for the results of the function call.
     ;;;
     ;;; In most cases this will be a single value, but it could also
@@ -921,6 +922,7 @@
     ;;; parameters, i.e. the buffer needs to be large enough
     ;;; to hold all the results sequentially.
     (param $results (@witx pointer u8))
+    (param $results_len $pointersize)
     (result $error (expected (error $errno)))
   )
 
