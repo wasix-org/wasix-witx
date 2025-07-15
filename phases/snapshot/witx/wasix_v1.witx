@@ -923,6 +923,16 @@
     ;;; to hold all the results sequentially.
     (param $results (@witx pointer u8))
     (param $results_len $pointersize)
+    ;;; Whether to perform strict checking on the parameters and results.
+    ;;; 
+    ;;; If this is set to true, the function will return an error if the
+    ;;; length and types of the parameters and results do not match the
+    ;;; function signature.
+    ;;;
+    ;;; If this is set to false, the function will not perform any checks.
+    ;;; Any missing bytes will be assumed to be zero and any extra bytes
+    ;;; will be ignored.
+    (param $strict $bool)
     (result $error (expected (error $errno)))
   )
 
