@@ -970,4 +970,52 @@
     (param $closure_id $function_pointer)
     (result $error (expected (error $errno)))
   )
+  
+  ;;; Provides information about the signature of a function in the indirect
+  ;;; function table at runtime.
+  ;;;
+  ;;; ### Errors
+  ;;;
+  ;;; Besides the standard error codes, `reflect_signature` may set `errno` to the
+  ;;; following errors:
+  ;;;
+  ;;; - EINVAL: The function pointer is not valid, i.e. it does not point to a
+  ;;; function in the indirect function table or the function has a unsupported
+  ;;; signature. The sizes in the result are undefined in this case.
+  ;;;
+  ;;; - EOVERFLOW: The argument_types and result_types buffers were not big enough
+  ;;; to hold the signature. They will be left unchanged. The reflection result
+  ;;; will be valid.
+  (@interface func (export "reflect_signature")
+    ;;; An index into the indirect function table.
+    ;;;
+    ;;; If there is no function at the requested slot, `EINVAL` will be returned.
+    (param $function_id $function_pointer)
+    ;;; A buffer for a list of types that the function takes as arguments.
+    ;;;
+    ;;; - If the buffer is too small to hold all argument types, it and
+    ;;; `result_types` remain untouched, and `EOVERFLOW` is returned.
+    ;;; - If the buffer is big enough, the types will be written to the buffer.
+    ;;; - If the buffer is too big, all remaining bytes will be unchanged.
+    ;;;
+    ;;; If the `argument_types_len` is 0 this buffer is never accessed and can be
+    ;;; null.
+    (param $argument_types (@witx pointer $wasm_value_type)) ;; Not a list, because it's mutable
+    ;;; Size of the buffer for argument types.
+    (param $argument_types_len u16)
+    ;;; A buffer for a list of types that the function returns as results.
+    ;;;
+    ;;; - If the buffer is too small to hold all argument types, it and
+    ;;; `argument_types` remain untouched, and `EOVERFLOW` is returned.
+    ;;; - If  the buffer is big enough, the types will be written to the buffer.
+    ;;; - If the buffer is too big, all remaining bytes will be unchanged.
+    ;;;
+    ;;; If the `result_types_len` is 0 this buffer is never accessed and can be
+    ;;; null.
+    (param $result_types (@witx pointer $wasm_value_type)) ;; Not a list, because it's mutable
+    ;;; Size of the buffer for result types.
+    (param $result_types_len u16)
+    ;;; The number of arguments and results and whether this result is cacheable.
+    (result $error (expected $reflection_result (error $errno)))
+  )
 )
