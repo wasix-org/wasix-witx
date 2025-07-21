@@ -1752,3 +1752,17 @@
 
 ;;; A list of WASM value types.
 (typename $wasm_value_type_array (list $wasm_value_type))
+
+;;; Information about the signature of a function
+(typename $reflection_result
+  (record
+    ;;; Cacheable is set if the signature of the function will not change in the future
+    (field $cacheable $bool)
+    ;;; Number of arguments of the function.
+    ;;; 0 if the function does not exist
+    (field $arguments u16)
+    ;;; Number of results of the function.
+    ;;; 0 if the function does not exist
+    (field $results u16)
+  )
+)
