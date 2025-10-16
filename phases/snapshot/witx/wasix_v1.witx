@@ -1018,4 +1018,44 @@
     ;;; The number of arguments and results and whether this result is cacheable.
     (result $error (expected $reflection_result (error $errno)))
   )
+
+  ;; Create a new coroutine context and start the coroutine scheduler
+  ;; This function initializes the coroutine system with a root coroutine
+  ;; and enters an event loop to manage coroutine execution
+  (@interface func (export "coroutine_context")
+      ;; The function table index of the root coroutine entrypoint
+      (param $entrypoint $function_pointer)
+      ;; Returns errno on error
+      (result $error (expected (error $errno)))
+  )
+
+  ;; Create a new coroutine with the specified entrypoint
+  ;; The coroutine is created in the Created state and can be switched to later
+  (@interface func (export "coroutine_new")
+      ;; Pointer to write the new coroutine ID to
+      (param $new_coroutine_ptr (@witx pointer u32))
+      ;; The function table index of the coroutine entrypoint
+      (param $entrypoint $function_pointer)
+      ;; Returns errno on error
+      (result $error (expected (error $errno)))
+  )
+
+  ;; Switch execution to another coroutine
+  ;; This suspends the current coroutine and resumes the target coroutine
+  ;; The current coroutine will resume when another coroutine switches back to it
+  (@interface func (export "coroutine_switch")
+      ;; The ID of the coroutine to switch to
+      (param $next_coroutine u32)
+      ;; Returns errno on error (should not normally return)
+      (result $error (expected (error $errno)))
+  )
+
+  ;; Delete a coroutine and free its resources
+  ;; The coroutine must not be currently active
+  (@interface func (export "coroutine_delete")
+      ;; The ID of the coroutine to delete
+      (param $coroutine u32)
+      ;; Returns errno on error
+      (result $error (expected (error $errno)))
+  )
 )
