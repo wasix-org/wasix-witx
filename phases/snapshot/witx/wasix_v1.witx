@@ -1022,41 +1022,41 @@
   ;; Create a new coroutine context and start the coroutine scheduler
   ;; This function initializes the coroutine system with a root coroutine
   ;; and enters an event loop to manage coroutine execution
-  (@interface func (export "coroutine_context")
-      ;; Pointer to write the main coroutine ID to
-      (param $new_coroutine_ptr (@witx pointer u32))
-      ;; The function table index of the root coroutine entrypoint
+  (@interface func (export "continuation_context")
+      ;; Pointer to write the main continuation ID to
+      (param $new_continuation_ptr (@witx pointer u32))
+      ;; The function table index of the root continuation entrypoint
       (param $entrypoint $function_pointer)
       ;; Returns errno on error
       (result $error (expected (error $errno)))
   )
 
-  ;; Create a new coroutine with the specified entrypoint
-  ;; The coroutine is created in the Created state and can be switched to later
-  (@interface func (export "coroutine_new")
-      ;; Pointer to write the new coroutine ID to
-      (param $new_coroutine_ptr (@witx pointer u32))
-      ;; The function table index of the coroutine entrypoint
+  ;; Create a new continuation with the specified entrypoint
+  ;; The continuation is created in the Created state and can be switched to later
+  (@interface func (export "continuation_new")
+      ;; Pointer to write the new continuation ID to
+      (param $new_continuation_ptr (@witx pointer u32))
+      ;; The function table index of the continuation entrypoint
       (param $entrypoint $function_pointer)
       ;; Returns errno on error
       (result $error (expected (error $errno)))
   )
 
-  ;; Switch execution to another coroutine
-  ;; This suspends the current coroutine and resumes the target coroutine
-  ;; The current coroutine will resume when another coroutine switches back to it
-  (@interface func (export "coroutine_switch")
-      ;; The ID of the coroutine to switch to
-      (param $next_coroutine u32)
+  ;; Switch execution to another continuation
+  ;; This suspends the current continuation and resumes the target continuation
+  ;; The current continuation will resume when another continuation switches back to it
+  (@interface func (export "continuation_switch")
+      ;; The ID of the continuation to switch to
+      (param $next_continuation u32)
       ;; Returns errno on error (should not normally return)
       (result $error (expected (error $errno)))
   )
 
-  ;; Delete a coroutine and free its resources
-  ;; The coroutine must not be currently active
-  (@interface func (export "coroutine_delete")
-      ;; The ID of the coroutine to delete
-      (param $coroutine u32)
+  ;; Delete a continuation and free its resources
+  ;; The continuation must not be currently active
+  (@interface func (export "continuation_delete")
+      ;; The ID of the continuation to delete
+      (param $continuation u32)
       ;; Returns errno on error
       (result $error (expected (error $errno)))
   )
