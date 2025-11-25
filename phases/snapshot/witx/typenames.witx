@@ -1767,6 +1767,7 @@
   )
 )
 
-;;; ID of a WASIX context
-;;; Can be obtained from context_create and used in other context_* functions
+;;; Opaque identifier referring to a WASIX context.
+;;; 
+;;; See wasix/context.h for more details
 (typename $context_id u64)

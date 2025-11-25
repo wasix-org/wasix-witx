@@ -1019,36 +1019,28 @@
     (result $error (expected $reflection_result (error $errno)))
   )
 
-  ;; Create a new context with the specified entrypoint
-  ;; The new context can be switched to via context_switch
-  (@interface func (export "context_new")
-      ;; Pointer to write the new context ID to
+  ;;; Create a new context.
+  ;;;
+  ;;; See wasix/context.h for more details
+  (@interface func (export "context_create")
       (param $new_context_ptr (@witx pointer $context_id))
-      ;; The function table index of the context entrypoint
       (param $entrypoint $function_pointer)
-      ;; Returns errno on error
       (result $error (expected (error $errno)))
   )
 
-  ;; Switch execution to another context
-  ;; This suspends the current context and resumes the target context
-  ;; The current context will resume when another context switches back to it
+  ;;; Suspend the active context and resume another.
+  ;;;
+  ;;; See wasix/context.h for more details
   (@interface func (export "context_switch")
-      ;; The ID of the context to switch to
       (param $next_context $context_id)
-      ;; Returns errno on error (should not normally return)
       (result $error (expected (error $errno)))
   )
 
-  ;; Delete a context and free its resources
-  ;; The context must not be currently active
-  (@interface func (export "context_delete")
-      ;; The ID of the context to delete
-      ;;
-      ;; You are not allowed to delete the currently active context
-      ;; You are not allowed to delete the main context (ID 0)
+  ;;; Destroy a suspended or terminated context.
+  ;;;
+  ;;; See wasix/context.h for more details
+  (@interface func (export "context_destroy")
       (param $context $context_id)
-      ;; Returns errno on error
       (result $error (expected (error $errno)))
   )
 )
