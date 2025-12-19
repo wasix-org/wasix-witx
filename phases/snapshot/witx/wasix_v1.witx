@@ -306,8 +306,8 @@
     (result $error (expected $pid (error $errno)))
   )
 
-  ;;; Identical to `proc_exit`, but it returns when it is called
-  ;;; after `proc_fork_env`
+  ;;; This is similar to `proc_exit` but it will switch back into the parent process
+  ;;; and return control there if we are in a `proc_fork_env` (vfork) context.
   (@interface func (export "proc_exit2")
     ;;; The exit code returned by the process.
     (param $rval $exitcode)
