@@ -866,6 +866,49 @@
     (result $error (expected $size (error $errno)))
   )
 
+  ;;; Receive a message, optional peer address, and optional ancillary data from
+  ;;; a socket.
+  ;;;
+  ;;; Note: This is similar to `recvmsg` in POSIX, though it also supports
+  ;;; reading the data into multiple buffers in the manner of `readv`.
+  (@interface func (export "sock_recv_msg")
+    (param $fd $fd)
+    ;;; List of scatter/gather vectors to which to store data.
+    (param $ri_data $iovec_array)
+    ;;; Message flags.
+    (param $ri_flags $riflags)
+    ;;; Optional output peer address. Null means the caller does not request it.
+    (param $addr (@witx pointer $addr_port))
+    ;;; Output control-message buffer.
+    (param $ro_control (@witx pointer u8))
+    ;;; Capacity of ro_control in bytes.
+    (param $ro_control_len $size)
+    ;;; Number of bytes stored in ri_data, message flags, and number of bytes
+    ;;; stored in ro_control.
+    (result $error (expected (tuple $size $roflags $size) (error $errno)))
+  )
+
+  ;;; Send a message, optional peer address, and optional ancillary data on a
+  ;;; socket.
+  ;;;
+  ;;; Note: This is similar to `sendmsg` in POSIX, though it also supports
+  ;;; writing the data from multiple buffers in the manner of `writev`.
+  (@interface func (export "sock_send_msg")
+    (param $fd $fd)
+    ;;; List of scatter/gather vectors from which to retrieve data.
+    (param $si_data $ciovec_array)
+    ;;; Message flags.
+    (param $si_flags $siflags)
+    ;;; Optional peer address. Null means connected socket / no explicit address.
+    (param $addr (@witx const_pointer $addr_port))
+    ;;; Input control-message buffer.
+    (param $si_control (@witx const_pointer u8))
+    ;;; Size of si_control in bytes.
+    (param $si_control_len $size)
+    ;;; Number of bytes transmitted.
+    (result $error (expected $size (error $errno)))
+  )
+
   ;;; Sends the entire contents of a file down a socket
   (@interface func (export "sock_send_file")
     (param $out_fd $fd)

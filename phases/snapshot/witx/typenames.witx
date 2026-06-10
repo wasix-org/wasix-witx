@@ -615,6 +615,36 @@
   )
 )
 
+;;; Socket control message level.
+(typename $sock_cmsg_level
+  (enum (@witx tag u16)
+    ;;; POSIX SOL_SOCKET.
+    $socket
+  )
+)
+
+;;; Socket control message type.
+(typename $sock_cmsg_type
+  (enum (@witx tag u16)
+    ;;; POSIX SCM_RIGHTS. Payload is an array of file descriptors.
+    $rights
+  )
+)
+
+;;; Socket control message header.
+;;;
+;;; Payload bytes immediately follow this header in the control buffer.
+(typename $sock_cmsg
+  (record
+    ;;; Header plus payload size in bytes.
+    (field $cmsg_len $size)
+    ;;; Control message level.
+    (field $cmsg_level $sock_cmsg_level)
+    ;;; Control message type.
+    (field $cmsg_type $sock_cmsg_type)
+  )
+)
+
 (typename hidden $sdflags
   (flags (@witx repr u8)
     $hidden
