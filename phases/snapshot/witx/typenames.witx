@@ -1744,6 +1744,9 @@
 
 (typename $proc_spawn_fd_op_array (list $proc_spawn_fd_op))
 
+;;; Array of null-terminated C strings passed as a pointer array.
+(typename $cstring_array (list (@witx pointer u8)))
+
 ;;; A handle to a dynamically-loaded library.
 (typename $dl_handle u32)
 

@@ -371,6 +371,23 @@
     (result $error (expected (error $errno)))
   )
 
+  ;;; Like `proc_exec3`, but `args` and `envs` are proper pointer arrays of
+  ;;; null-terminated strings (each env entry is `KEY=value`).
+  (@interface func (export "proc_exec4")
+    ;;; Name of the process to be spawned
+    (param $name string)
+    ;;; List of arguments (null-terminated strings)
+    (param $args $cstring_array)
+    ;;; List of environment variables as `KEY=value` strings (null to inherit)
+    (param $envs $cstring_array)
+    ;;; Whether to search for the file in PATH.
+    (param $search_path $bool)
+    ;;; The current value of the PATH env var.
+    (param $path string)
+    ;;; If the named process does not exist an error will be returned.
+    (result $error (expected (error $errno)))
+  )
+
   ;;; Spawns a new process within the context of the parent process
   ;;; (i.e. this process). It inherits the filesystem and sandbox
   ;;; permissions but runs standalone.
@@ -410,6 +427,29 @@
     ;;; List of the env vars to pass the process
     ;;; (entries are separated by line feeds)
     (param $envs string)
+    ;;; List of FD operations to perform before
+    ;;; spawning the new process.
+    (param $fd_ops $proc_spawn_fd_op_array)
+    ;;; List of signal dispositions to override
+    ;;; for the new process.
+    (param $signal_dispositions $signal_disposition_array)
+    ;;; Whether to search for the file in PATH.
+    (param $search_path $bool)
+    ;;; The current value of the PATH env var.
+    (param $path string)
+    ;;; If the named process does not exist an error will be returned.
+    (result $error (expected $pid (error $errno)))
+  )
+
+  ;;; Like `proc_spawn2`, but `args` and `envs` are proper pointer arrays of
+  ;;; null-terminated strings (each env entry is `KEY=value`).
+  (@interface func (export "proc_spawn3")
+    ;;; Name of the process to be spawned
+    (param $name string)
+    ;;; List of arguments (null-terminated strings)
+    (param $args $cstring_array)
+    ;;; List of environment variables as `KEY=value` strings (null to inherit)
+    (param $envs $cstring_array)
     ;;; List of FD operations to perform before
     ;;; spawning the new process.
     (param $fd_ops $proc_spawn_fd_op_array)
