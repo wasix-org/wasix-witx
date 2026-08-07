@@ -318,6 +318,9 @@
     $recv_data_truncated
     ;;; Return immediately if the read would block.
     $recv_dont_wait
+    ;;; Receive out-of-band (urgent) data. Only meaningful for stream sockets
+    ;;; whose transport supports it (e.g. TCP).
+    $recv_oob
   )
 )
 
@@ -612,6 +615,9 @@
    (flags (@witx repr u16)
     ;;; Return immediately if the write would block.
     $send_dont_wait
+    ;;; Send out-of-band (urgent) data. Only meaningful for stream sockets
+    ;;; whose transport supports it (e.g. TCP).
+    $send_oob
   )
 )
 
