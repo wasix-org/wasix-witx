@@ -1168,6 +1168,15 @@
     $type
     ;;; Protocol of the socket
     $proto
+    ;;; TCP idle seconds before sending keepalive probes (positive integer).
+    ;;; Read and written using sock_get_opt_size and sock_set_opt_size.
+    $tcp_keep_idle
+    ;;; TCP seconds between keepalive probes (positive integer).
+    ;;; Read and written using sock_get_opt_size and sock_set_opt_size.
+    $tcp_keep_interval
+    ;;; TCP unanswered keepalive probes before closing the connection (positive integer).
+    ;;; Read and written using sock_get_opt_size and sock_set_opt_size.
+    $tcp_keep_count
   )
 )
 
